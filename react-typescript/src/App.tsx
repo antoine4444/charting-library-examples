@@ -1,17 +1,58 @@
+/* tslint:disable */
 import * as React from 'react';
 import './App.css';
 import { TVChartContainer } from './components/TVChartContainer/index';
+import { IJsonModel, Layout, Model, TabNode } from 'flexlayout-react';
 
-class App extends React.Component {
+export const json = {
+	global: {
+	  tabEnableClose: true,
+	  tabEnableFloat: true,
+	  tabEnableRename: true,
+	  tabSetEnableMaximize: true
+	},
+	layout: {
+	  type: "row",
+	  children: [
+		{
+			type: "tabset",
+			weight: 70,
+			children: [{
+				type: "tab",
+				component: <TVChartContainer />,
+				name: 'TV',
+				id:'TV'
+			  }]
+		  },
+		  {
+			type: "tabset",
+			weight: 30,
+			children: [{
+				type: "tab",
+				component: "Another div",
+				name: "Another div"
+			  }]
+		  }
+	  ]
+	}
+  } as IJsonModel;
+
+  const factory = (node: TabNode) => node.getComponent()
+ class App extends React.Component {
 	render() {
 		return (
 			<div className={ 'App' }>
-				<header className={ 'App-header' }>
-					<h1 className={ 'App-title' }>
-						TradingView Charting Library and React Integration Example
-					</h1>
-				</header>
-				<TVChartContainer />
+				<Layout 
+					model={Model.fromJson(json)} 
+					factory={factory}
+					icons={{
+						close: "(close)",
+						maximize: "(maximize)",
+						restore: "(restore)",
+						popout: "(popout)",
+						more: "(more)"
+					}}
+				/>
 			</div>
 		);
 	}
